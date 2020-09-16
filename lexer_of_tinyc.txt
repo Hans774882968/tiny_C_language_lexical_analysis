@@ -1,0 +1,265 @@
+//仅支持字符、字符串、正整数、struct。
+//已经支持忽略注释
+//TODO：报错时给出行号。
+//bug：a=!a的"=!"黏在一起。类似a+=-1、a-=!a、?++x:--x都错误地认为符号非法。
+10
+int main(){
+    int int0,_aA1,a = 2,b = 1;
+    int0 = 3;_aA1 = 4;
+    if(a >= b){
+        a *=(b+(1));
+        a%=(b-=(c<<=(2)));
+    }
+    else _aA1 += int0;
+    return 0;
+}
+
+19
+void nulf(){  return; }//
+//comment
+//
+//***
+int func(int a,int b){
+    return a += b;
+}
+/**/
+/*****/
+/*
+this is comment
+*/
+
+int main(){
+    int _t = func(1,2) + func(3,4);
+    int brr[21]={0,0,1};
+    nulf();a+=1[brr];/**/
+    return 0;
+}
+
+19
+void nulf(){return;}//
+//comment
+// /*
+//***
+int func(int a,int b){//f
+    return a += b;
+}
+/**/
+/*****/
+/**/ /**/
+
+int main(){
+    int _t = func(1,2) + func(3,4);
+    for(int x=0;;x-=105) x %= (x += 3);
+    nulf();/* a+=b; */
+    /*++a;*/
+    for(int i = 0;i < 10;i += 1) print(i),print(i * i);
+    return 0;
+}
+
+7
+void ff(){int x=5;
+    if(x % 2==1){x<<= 5;}
+    else x >>=5;
+    --x;++x;
+    -- +=x;//is legal because they split.
+/**/}//this kind of comment should be ignored as well.
+int main(){return -1;}
+
+6
+int main(){
+    char *xx=(1+2)>>(1<<1)<<(2>>1)+(1<<2);
+    char c[2][500] = {"111",{"\"\\\\\"",'\0'}};
+    for(int i=0;i<n;++i) printf("%d%c",i+1," \n"[i == n - 1]);
+    print(c);
+}
+
+8
+/**?"?*/
+int main(){
+    int dp[SZ >> 2][SZ << 10];
+    char s[2] = {'\n','\0'};char s0[3<<(1&5)+10] = "char cc[100+(15<<2)] = \"main\";return 0;\"\\\\\"";
+    char cc[100+(15<<2)] = "main\";return 0;\"\\\\\"";
+    puts(s);puts(cc+"?");
+    printf("%lld\n",dp[n][n] - dp[n][h - 1]);
+}
+
+11
+struct Node{
+    int a,b;char s[30] = "0x344f";
+    bool operator <(const Node &rh) const {
+        if(a!=rh.a) return a < rh.a;
+        return b<rh.b;
+    }
+};
+int main(){
+    Node a;a.a = 1;a.s[(10-1)>>(2-1)]='x';
+    printf("%lld\n",a.a);
+}
+
+6
+ans=1- --x;/*ans=1---x is illegal*/
+ans += nod[u].val*(sl<<1|1)+nod[p].val;
+ans += (nod[u].val-nod[p].val)*(i<<1|1);
+ans+=(++x-(--x)*(x++)/(x--));
+const string quot[QUONUM] = {"'","\"",'\'','"','\"'};
+print("is'legal:",(legal?"true":"false\\"));
+
+6
+int main(){
+    int x = 0;
+    int u = x %2==0?(++x):x--;
+    char s[100]="xxx"=="xxx"?"yyy":"zzzz";
+    return u=(x>>1),0;
+}
+
+6
+#include<stdio.h>
+main() {
+	char *s = "#include<stdio.h>%cmain() {%c%cchar *s = %c%s%c;%c%cprintf(s, 10, 10, 9, 34, s, 34, 10, 9, 10, 9, 10, 10);%c%cgetchar()getchar();%c}";
+	printf(s, 10, 10, 9, 34, s, 34, 10, 9, 10, 9, 10, 10);
+    getchar();getchar();
+}
+
+30
+const int SZ = 1000 + 3;
+int n;
+int a[SZ],b[SZ];
+template<typename Type>inline void read(Type &xx){
+    Type f = 1;char ch;xx = 0;
+    for(ch = getchar();ch < '0' || ch > '9';ch = getchar()) if(ch == '-') f = -1;
+    for(;ch >= '0' && ch <= '9';ch = getchar()) xx = xx * 10 + ch - '0';
+    xx *= f;
+}
+int main(int argc, char* argv) {
+    while(~scanf("%d",&n)&&n){
+        for(int i = 0;i < n;++i)read(a[i]);
+        for(int i = 0;i < n;++i)read(b[i]);
+        sort(a,a + n);sort(b,b + n);
+        int ans = 0;
+        for(int i = 0,i1 = 0,j1=n-1,i2=0,j2=n-1;i<n;++i){
+            if(a[j1] < b[j2]){i1++;j2--;--ans;}
+            else if(a[j1]==b[j2]){
+                if(a[i1]>b[i2])i1++;i2++;++ans;
+                else{
+                    if(a[i1]<b[j2])--ans;
+                    i1++;j2--;
+                }
+            }
+            else{j1--;j2--;++ans;}
+        }
+        printf("%d\n",ans*200);
+    }
+    return 0;
+}
+
+60
+const int SZ = 4000 + 5,LN = 1003;
+/*int n;LL ans;
+
+template<typename Type>inline void read(Type &xx){
+    Type f = 1;char ch;xx = 0;
+    for(ch = getchar();ch < '0' || ch > '9';ch = getchar()) if(ch == '-') f = -1;
+    for(;ch >= '0' && ch <= '9';ch = getchar()) xx = xx * 10 + ch - '0';
+    xx *= f;
+}*/
+
+struct Trie{
+    int sz;
+    struct Node{
+        int son,bro,val;char ch;
+        Node(){son = bro = val = 0;ch = 0;}
+        Node(int s,int b,int v,char ch){}
+    }nod[SZ * LN];
+    Trie(){init();}
+    void init(){
+        for(int i = 0;i <= sz;++i) nod[i] = Node();
+        sz = 0;
+    }
+    void insert(char s[]){
+        int sl = strlen(s),u = 0;
+        for(int i = 0;i < sl;++i){
+            int p;for(p = nod[u].son;p && nod[p].ch != s[i];p = nod[p].bro);
+            if(!p){
+                p = ++sz;
+                nod[p] = Node(0,nod[u].son,0,s[i]);
+                nod[u].son = p;
+            }
+            ans += (nod[u].val - nod[p].val) * (i << 1 | 1);
+            ++nod[u].val;
+            u = p;
+        }
+        int p;for(p = nod[u].son;p && nod[p].ch != '\0';p = nod[p].bro);
+        if(!p){
+            p = ++sz;
+            nod[p] = Node(0,nod[u].son,0,'\0');
+            nod[u].son = p;
+        }
+        ans += nod[u].val * (sl << 1 | 1) + nod[p].val;
+        ++nod[p].val;
+        ++nod[u].val;
+    }
+}tr;
+int main(int argc) {
+    int cas = 0;
+    while(scanf("%d",&n) != EOF && n){
+        tr.init();
+        ans = 0;
+        for(int i = 1;i <= n;++i){
+            char s[LN];
+            scanf("%s",s);
+            tr.insert(s);
+        }
+        printf("Case %d: %lld\n",++cas,ans);
+    }
+    return 0;
+}
+
+//不合法int
+5
+int main(){
+    int x = 0x33g,y = 0b01,_z = 037;//0x33g
+    /**/f(00);
+    print(x, y);//print
+}
+
+5
+int main(){
+    int x = 0x33f,y = 0b03,_z = 036;//0b03
+    /**/f(00);
+    print(x, y);//print
+}
+
+5
+int main(){
+    int x = 0x3344,y = 0b01,_z = 0g;//0g
+    /**/f(08);//08
+    print(x, y);//print
+}
+
+5
+int main(){
+    int x = 0x3344,y = 0b01,_z = 0aa;//,0aa
+    /**/f(08);//08
+    print(x, y);//print
+}
+
+5
+int main(){
+    int x = 0x3344,y = 0b01,_z = 0a;//,0a
+    /**/f(08);//08
+    print(x, y);//print
+}
+
+5
+int main(){
+    int x = 0x3344,y = 0b01,_z = 037;
+    /**/f(08);//08
+    print(x, y);//print
+}
+
+//不合法char
+4
+int main(){
+    char c = '\ ',_d_ = '\n\n';
+    putchar(c);putchar(_d_);
+}
