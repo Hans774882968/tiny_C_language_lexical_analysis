@@ -1,7 +1,82 @@
-//仅支持字符、字符串、正整数、struct。
-//已经支持忽略注释
-//TODO：报错时给出行号。
-//bug：a=!a的"=!"黏在一起。类似a+=-1、a-=!a、?++x:--x都错误地认为符号非法。
+//类型仅支持字符、字符串、正整数、struct。
+//支持忽略注释
+//新增：总是匹配最长的符号，比如"+="优先于"+"。
+
+//TODO：1-报错时给出行号。2-（可能永远无法支持的）"#"。
+//bug：1-（已修复）a=!a的"=!"黏在一起。类似a+=-1、a-=!a、?++x:--x都错误地认为符号非法。
+
+//基础测试
+2
+int char void if else while for do struct const return
+?:~<>!=>=<===!&&&|||,.;()[]{}+-*/%<<>>++--+=-=*=/=%=<<=>>==
+//(int,keyword,1)
+(char,keyword,2)
+(void,keyword,3)
+(if,keyword,4)
+(else,keyword,5)
+(while,keyword,6)
+(for,keyword,7)
+(do,keyword,8)
+(struct,keyword,9)
+(const,keyword,10)
+(return,keyword,11)
+(?,symbol,12)
+(:,symbol,13)
+(~,symbol,14)
+(<,symbol,15)
+(>,symbol,16)
+(!=,symbol,17)
+(>=,symbol,18)
+(<=,symbol,19)
+(==,symbol,20)
+(!,symbol,21)
+(&&,symbol,23)
+(&,symbol,22)
+(||,symbol,25)//总是匹配最长，比如+=优先于+
+(|,symbol,24)
+(,,symbol,26)
+(.,symbol,27)
+(;,symbol,28)
+((,symbol,29)
+(),symbol,30)
+([,symbol,31)
+(],symbol,32)
+({,symbol,33)
+(},symbol,34)
+(+,symbol,35)
+(-,symbol,36)
+(*,symbol,37)
+(/,symbol,38)
+(%,symbol,39)
+(<<,symbol,40)
+(>>,symbol,41)
+(++,symbol,42)
+(--,symbol,43)
+(+=,symbol,44)
+(-=,symbol,45)
+(*=,symbol,46)
+(/=,symbol,47)
+(%=,symbol,48)
+(<<=,symbol,49)
+(>>=,symbol,50)
+(=,symbol,51)
+
+//符号截断测试
+2
+int a=0;a=!a,a-=!a;a>>=!a;
+int b=a?++x:--x;
+
+2
+int *c;
+int a;a^=*c;
+
+3
+int x = 4,y=3,x0 = 4,y0=3,x1 = 4,y1=3;
+int z=x---y,z0 = 4-(--y0),z1 = (x1--)-y1;
+cout<<x << " " <<z<<" ("<<z << "," << x << ") " << x1 << " " << z1 <<endl;
+//以上样例运行结果证明，x---y被认为是(x--)-y，所以我们总是优先截断最长的符号串，即"--"而非"-"。
+
+//普通测试
 10
 int main(){
     int int0,_aA1,a = 2,b = 1;
@@ -10,7 +85,7 @@ int main(){
         a *=(b+(1));
         a%=(b-=(c<<=(2)));
     }
-    else _aA1 += int0;
+    else _aA1 += int0,a/=!a;
     return 0;
 }
 

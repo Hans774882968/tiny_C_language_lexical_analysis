@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include "utils_for_tinyc.cpp"
+#include "trie.cpp"
 using namespace std;
 typedef long long LL;
 #define rep(i,a,b) for(int i = (a);i <= (b);++i)
@@ -13,30 +14,34 @@ struct Node{
 class Lexer{
     private:
         string s;int idx;
-        static const int KWDNUM = 12,SYMNUM = 40,QUONUM = 2;
-        static const int INTCODE = KWDNUM + SYMNUM + QUONUM + 1;
-        const string kwd[KWDNUM] = {"int","char","void","if","else","while","for","do","for","struct","const","return"};
-        const string symbol[SYMNUM] = {"?",":","~","<",">","!=",">=","<=","==","!","&","&&","|","||",",",".",";","(",")","[","]","{","}","+","-","*","/","%","<<",">>","++","--","+=","-=","*=","/=","%=","<<=",">>=","="};
-        const string quot[QUONUM] = {"'","\""};
-        set<char> symb_ch;
         vector<Node> res;
+        static const int KWDNUM = 11,SYMNUM = 44,QUONUM = 2;
+        static const int INTCODE = KWDNUM + SYMNUM + QUONUM + 1;
+        static const string kwd[KWDNUM];
+        static const string symbol[SYMNUM];
+        static const string quot[QUONUM];
+        static set<char> symbol_ch;
+        static Trie symbol_dict,kwd_dict;
     public:
-        Lexer(){idx = 0;init();}
-        Lexer(string s):s(s){idx = 0;init();}
+        Lexer(){idx = 0;}
+        Lexer(string s):s(s){idx = 0;}
         
         vector<Node> getRes(){return res;}
-        void init(){
+        static void init(){
             re_(i,0,SYMNUM){
-                for(auto x: symbol[i]) symb_ch.insert(x);
+                for(auto x: symbol[i]) symbol_ch.insert(x);
+                symbol_dict.insert(symbol[i]);
+            }
+            re_(i,0,KWDNUM){
+                kwd_dict.insert(kwd[i]);
             }
         }
+        
         int is_symbol_str(string symb){
-            re_(i,0,SYMNUM) if(symbol[i] == symb) return i;
-            return -1;
+            return symbol_dict.in_dict(symb);
         }
         int is_keyword_str(string token){
-            re_(i,0,KWDNUM) if(kwd[i] == token) return i;
-            return -1;
+            return kwd_dict.in_dict(token);
         }
         int is_quote(string token){
             re_(i,0,QUONUM) if(quot[i][0] == token[0]) return i;
@@ -63,7 +68,7 @@ class Lexer{
             for(auto rs: res) printf("(%s,%s,%d)\n",rs.token.c_str(),get_token_type_name(rs.code),rs.code);
         }
         bool is_symbol(char ch){
-            return symb_ch.find(ch) != symb_ch.end();
+            return symbol_ch.find(ch) != symbol_ch.end();
         }
         
         string get_identifier(){
@@ -79,19 +84,12 @@ class Lexer{
         }
         string get_symbol(){
             int tidx = idx;
-            if(s[idx] == ',' || s[idx] == ';' || s[idx] == '(' || s[idx] == ')' || s[idx] == '[' || s[idx] == ']' || s[idx] == '{' || s[idx] == '}'){
-                ++idx;
-                return s.substr(tidx,idx - tidx);
-            }
             //注释符号必须被截断
             if(s.substr(idx,2) == "//" || s.substr(idx,2) == "/*"){
                 idx += 2;
                 return s.substr(tidx,2);
             }
-            for(;idx < s.size() && is_symbol(s[idx]);++idx){
-                if(s[idx] == ',' || s[idx] == ';' || s[idx] == '(' || s[idx] == ')' || s[idx] == '[' || s[idx] == ']' || s[idx] == '{' || s[idx] == '}')
-                    break;
-            }
+            for(;idx < s.size() && is_symbol(s[idx]);++idx);
             return s.substr(tidx,idx - tidx);
         }
         string get_const_str(){
@@ -124,7 +122,7 @@ class Lexer{
                 for(;idx < s.size() && s[idx] != '\n';++idx);
                 return;
             }
-            //注释以"/*"开头
+            //注释以"/*"开头的情况
             int comm_state = 0;
             for(;idx < s.size() && s.substr(idx - 2,2) != "*/";++idx);
         }
@@ -171,8 +169,10 @@ class Lexer{
                         }
                         else{
                             if(symb.size() > 3 || is_symbol_str(symb) == -1){
-                                printf("Invalid symbol: %s\n",symb.c_str());
-                                return false;
+                                int sl = symbol_dict.get_longest_prefix(symb);
+                                idx = idx - symb.size() + sl;//调整idx
+                                symb = symb.substr(0,sl);
+                                //我们对于未知符号，会自动忽略，比如目前还不支持的#
                             }
                             res.push_back({symb,get_token_id(symb)});
                         }
@@ -201,7 +201,14 @@ template<typename Type>inline void read(Type &xx){
     xx *= f;
 }
 
+const string Lexer::kwd[Lexer::KWDNUM] = {"int","char","void","if","else","while","for","do","struct","const","return"};
+const string Lexer::symbol[Lexer::SYMNUM] = {"?",":","~","<",">","!=",">=","<=","==","!","&&","||",",",".",";","(",")","[","]","{","}","+","-","*","/","%","&","|","^","<<",">>","++","--","+=","-=","*=","/=","%=","&=","|=","^=","<<=",">>=","="};
+const string Lexer::quot[Lexer::QUONUM] = {"'","\""};
+set<char> Lexer::symbol_ch;
+Trie Lexer::symbol_dict,Lexer::kwd_dict;
+
 int main(int argc, char** argv) {
+    Lexer::init();
     while(1){
         int n;read(n);
         if(n <= 0) break;
